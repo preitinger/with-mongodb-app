@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../lib/mongodb'
 import {Db, WithId} from "mongodb"
-import {Person} from "../../lib/Person"
+import {Person, PersonWithId} from "../../lib/Person"
 
 export default async function addPerson(
   req: NextApiRequest,
@@ -28,7 +28,7 @@ export default async function addPerson(
                 console.log("insertedId: ", insertRes.insertedId);
             }
         
-            const returnVal: Person = {
+            const returnVal: PersonWithId = {
                 ...person,
                 id: insertRes.insertedId.toJSON()
             }
