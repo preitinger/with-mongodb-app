@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import Link from 'next/link';
+import React from 'react'
 
-export async function getServerSideProps(context:any) {
+export async function getServerSideProps(context:any): Promise<{ props: { isConnected: boolean; }; }> {
   try {
     await clientPromise
     // `await clientPromise` will use the default database passed in the MONGODB_URI
@@ -39,6 +41,8 @@ export default function Home({
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
         </h1>
+
+        <Link href="/persons">persons</Link>
 
         {isConnected ? (
           <h2 className="subtitle">You are connected to MongoDB</h2>
