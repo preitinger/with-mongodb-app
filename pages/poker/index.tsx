@@ -101,7 +101,11 @@ const PokerHome: React.FunctionComponent<any> = () => {
     gameList.push(...game1.players.map(p => <Player key={p.name} player={p} className={p.name === name ? "ownPlayer" : ""}/>))
   }
 
+  console.log("render poker index");
+
   return (
+    
+    <React.StrictMode>
     <div>
       <h1>Poker</h1>
       <h3>Spieler</h3>
@@ -117,6 +121,7 @@ const PokerHome: React.FunctionComponent<any> = () => {
         : null
       }
     </div>
+    </React.StrictMode>
   )
 }
 
