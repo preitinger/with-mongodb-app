@@ -1,0 +1,13 @@
+#toPoker {
+  font-size:xx-large;
+  margin:50px;
+}
+.player {
+  margin:20px;
+  border-style: solid;
+  border-color: black;
+  padding: 10px;
+}
+.ownPlayer {
+  font-weight: bold;
+}

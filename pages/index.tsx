@@ -32,6 +32,9 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="container">
+      <div id="toPoker">
+        <Link href="/poker">Poker</Link>
+      </div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
