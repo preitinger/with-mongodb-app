@@ -1,6 +1,6 @@
 // Table.ts
 
-import * as br from "./BetRound"
+import * as br from "./holdem/BetRound"
 
 
 export type Card = number; // 0..51

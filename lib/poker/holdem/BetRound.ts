@@ -96,11 +96,11 @@ function playerOfBetter<Seat>(b: BetRound<Seat>, better: Better): Player<Seat> {
 }
 
 function cycleActive<T>(b: BetRound<T>): void {
-    console.log("cycleActive: vorher", b.active);
+    // console.log("cycleActive: vorher", b.active);
     console.assert(b.remaining > 0);
     b.active = (b.active + 1) % b.betters.length;
     --b.remaining;
-    console.log("cycleActive: nachher", b.active);
+    // console.log("cycleActive: nachher", b.active);
 }
 
 function activeBetter(b:BetRound<any>): Better {
@@ -127,7 +127,7 @@ function setBlinds<Seat>(b: BetRound<Seat>):number {
         
         const better = b.betters[i];
         const player = playerOfBetter(b, better);
-        console.log("chips von ", i, " zu Beginn: ", player.chips);
+        // console.log("chips von ", i, " zu Beginn: ", player.chips);
         let chips = 0;
         switch(player.blind) {
             case "none":
@@ -143,7 +143,7 @@ function setBlinds<Seat>(b: BetRound<Seat>):number {
                 chips = Math.min(b.smallBlind * 2, player.chips);
         }
 
-        console.log("chips bei i=", i, ": ", chips);
+        // console.log("chips bei i=", i, ": ", chips);
         
         better.chips = chips;
         player.chips -= chips;

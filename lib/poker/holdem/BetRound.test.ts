@@ -1000,7 +1000,7 @@ test("following round, all check", () => {
 
 })
 
-test.only("following round, check, all-in raise, all-in call, fold", () => {
+test("following round, check, all-in raise, all-in call, fold", () => {
     const testPlayers = createTestPlayers(3);
     testPlayers[0].chips = 10;
     testPlayers[1].chips = 12;
