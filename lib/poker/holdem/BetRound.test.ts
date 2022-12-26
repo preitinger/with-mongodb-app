@@ -5,30 +5,8 @@ import userEvent from '@testing-library/user-event'
 import {/*isInaccessable,*/ logRoles} from '@testing-library/dom'
 import { notDeepEqual } from "assert";
 import * as BetRound from "./BetRound"
+import {createTestPlayers} from "./TestPlayers"
 
-function createTestPlayers(n: number, chips?: number):BetRound.Player<number>[] {
-    if (chips === undefined) {
-        chips = 10;
-    }
-    const a:BetRound.Player<number>[] = []
-    for (let i = 0; i < n; ++i) {
-        a.push({
-            seat: i,
-            chips: chips,
-            blind: (
-                n === 2 ?
-                (
-                    i === 0 ? "big" : "small"
-                )
-                :
-                (
-                    i === 0 ? "small" : i === 1 ? "big" : "none"
-                )
-            )
-        })
-    }
-    return a;
-}
 
 test("create heads-up", () => {
     const b = BetRound.create(1, createTestPlayers(2));

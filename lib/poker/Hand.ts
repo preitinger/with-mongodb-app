@@ -1,6 +1,6 @@
 // Hand.ts
 
-import {Card, cardValue, cardColor, compareCards} from "./Card"
+import {Card, cardValue, cardColor, compareCards, format} from "./Card"
 
 
 export type Hand = Card[]; // genau 5 Karten ausgewaehlt aus den insgesamt 7 hole cards und board cards; so dass ein max. Handwert entsteht.
@@ -89,6 +89,7 @@ export function winners(handValues: (HandValue|null)[]): number[] {
     return positions;
 }
 
+
 export function isFlush(hand: Hand): boolean {
     const col = cardColor(hand[0]);
 
@@ -124,8 +125,12 @@ export function isStraight(hand: Hand): [boolean, number] {
 export function handValue(hand: Hand): HandValue {
 
     if (hand.length !== 5) throw Error("Unexpected hand length: " + hand.length);
-    // zunaechst immer absteigend sortieren
+    // zunaechst immer kopieren und absteigend sortieren
+    hand = hand.slice();
     hand.sort((a, b) => compareCards(b, a));
+
+    // console.log("sortierte hand: ", hand, " = ", hand.map(card => format(card)));
+    
 
     const flush = isFlush(hand);
     const [straight, highest] = isStraight(hand);
@@ -207,7 +212,7 @@ export function handValue(hand: Hand): HandValue {
     if (vals[0] === vals[1] && vals[2] === vals[3]) {
         return {
             type: 2,
-            vals: [vals[0], vals[3], vals[4]]
+            vals: [vals[0], vals[2], vals[4]]
         };
     }
     if (vals[0] === vals[1] && vals[3] === vals[4]) {
@@ -219,7 +224,7 @@ export function handValue(hand: Hand): HandValue {
     if (vals[1] === vals[2] && vals[3] === vals[4]) {
         return {
             type: 2,
-            vals: [vals[1], vals[3], vals[2]]
+            vals: [vals[1], vals[3], vals[0]]
         };
     }
 

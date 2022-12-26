@@ -1,6 +1,6 @@
 // BaseGame.ts
 
-import { combinationsOf } from "../Combinations";
+import { combinationsOf } from "../../util/Combinations";
 import * as br from "./BetRound"
 import {Card, cardValue, cardColor, compareCards} from "../Card"
 import {Hand, HandValue, handValue, handValueOrNull, compare, winners} from "../Hand"
@@ -26,10 +26,6 @@ export type BaseGame<Seat> = {
 }
 
 export function create<Seat>(smallBlind: number, players: br.Player<Seat>[]): BaseGame<Seat> {
-    // TODO hier fehlt noch fallunterscheidung
-    // ob von anfang an alle schon wegen der blinds all-in sind, 
-    // ist theoretisch moeglich wenn der Gewinner der letzten Runde aufgestanden ist
-    // und z.B. noch 2 uebrig bleiben, die nur noch gerade oder weniger als einen Big Blind haben.
 
     const betRound = br.create(smallBlind, players);
 
@@ -69,7 +65,8 @@ export type GameResult<Seat> = {
 function afterBetRound<Seat>(g: BaseGame<Seat>, roundRes: br.BetRoundResult<Seat>): GameResult<Seat>|null {
 
     const pots = roundRes[1];
-    const lastPot = pots[pots.length - 1];
+    g.pots.push(...pots);
+    const lastPot = g.pots[g.pots.length - 1];
     console.assert(lastPot.players.length >= 1);
     
     if (lastPot.players.length > 1) {
@@ -92,16 +89,14 @@ function afterBetRound<Seat>(g: BaseGame<Seat>, roundRes: br.BetRoundResult<Seat
         }
         g.betRound = null;
         g.players = roundRes[0];
-        g.pots = roundRes[1];
         return null;
     } else {
         // im main pot nur noch einer uebrig, keine weitere setzrunden notwendig
         // aber evtl. gibt es einen oder mehrere side-pots, fuer die ein show-down
         // notwendig ist
 
-        if (pots.length > 1) {
+        if (g.pots.length > 1) {
             // es gibt mind. einen side-pot, so dass show-down notwendig
-            g.pots = pots;
             g.betRound = null;
             g.state = "remainingCards";
             return null;
@@ -229,7 +224,7 @@ function findPotWinners(players: number[], holeCards: (HoleCards|null)[], board:
     const winners1 = winners(playerHands.map(hand => handValueOrNull(hand)));
     return {
         players: winners1.map(winner => players[winner]),
-        chipsPerWinner: potChips / winners.length
+        chipsPerWinner: potChips / winners1.length
     };
 }
 
@@ -241,12 +236,16 @@ export function showdown(g: BaseGame<Seat>, holeCards: (HoleCards|null)[]): Game
 
     const allPotWinners: PotWinners[] = [];
 
+    console.log("g.pots.length", g.pots.length);
+    
+
     g.pots.forEach(pot => {
         const potHoleCards = pot.players.map(player => (holeCards[player]));
         const potWinners: PotWinners = findPotWinners(pot.players, potHoleCards, g.board, pot.chips);
-        potWinners.players.forEach(potWinner => {
-            allPotWinners.push(potWinners);
-        })
+        allPotWinners.push(potWinners);
+        // potWinners.players.forEach(potWinner => {
+        //     allPotWinners.push(potWinners);
+        // })
     })
 
     return {
